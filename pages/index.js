@@ -1,6 +1,11 @@
-import { CSVLink, CSVDownload } from 'react-csv'
+import Router from 'next/router'
+import { CSVLink } from 'react-csv'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+
+function go(id) {
+  Router.push(`/api/profile/${id}`)
+}
 
 export default function Home(/*{ profiles }*/) {
   const [profiles, setProfiles] = useState([])
@@ -31,11 +36,15 @@ export default function Home(/*{ profiles }*/) {
       <h1>Profiles List Preview</h1>
       {profiles.map(profile => {
         return (
-          <p key={profile.email}>
-            {profile.name} : {profile.email}
-          </p>
+          <>
+            <p key={profile.email}>
+              {profile.name} : {profile.email}
+            </p>
+            <button onClick={() => go(profile.id)}>go</button>
+          </>
         )
       })}
+      <br />
       <CSVLink {...csvReport}>EXPORT CSV</CSVLink>
     </>
   )
