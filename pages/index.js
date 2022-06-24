@@ -1,7 +1,9 @@
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { CSVLink } from 'react-csv'
 import { useEffect, useState } from 'react'
+import { QRCodeSVG } from 'qrcode.react'
 import axios from 'axios'
+import Link from 'next/link'
 
 function go(id) {
   Router.push(`/api/profile/${id}`)
@@ -9,6 +11,7 @@ function go(id) {
 
 export default function Home(/*{ profiles }*/) {
   const [profiles, setProfiles] = useState([])
+  const router = useRouter()
 
   useEffect(() => {
     axios
@@ -33,14 +36,26 @@ export default function Home(/*{ profiles }*/) {
 
   return (
     <>
-      <h1>Profiles List Preview</h1>
+      <h1 className="text-red-500">Profiles List Preview</h1>
+      <h2>pathname:- {() => router.push(`/api/profile/1`).then().pathname}</h2>
+      <h2>asPath:- {router.asPath}</h2>
       {profiles.map(profile => {
         return (
           <>
             <p key={profile.email}>
               {profile.name} : {profile.email}
             </p>
-            <button onClick={() => go(profile.id)}>go</button>
+            <button onClick={() => Router.push(`api/profile/${profile.id}`)}>
+              go push
+            </button>
+
+            <button onClick={() => console.log(`api/profile/${profile.id}`)}>
+              go
+            </button>
+            <br />
+            <br />
+            <QRCodeSVG value="" />
+            <br />
           </>
         )
       })}
